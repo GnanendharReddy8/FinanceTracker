@@ -20,10 +20,10 @@ pipeline {
         stage('Build JARs') {
             steps {
                 script {
-                    sh 'cd user-service && ./mvn clean package -DskipTests'
-                    sh 'cd txn-service && ./mvn clean package -DskipTests'
-                    sh 'cd report-service && ./mvn clean package -DskipTests'
-                    sh 'cd api-gateway && ./mvn clean package -DskipTests'
+                    sh 'cd user-service && mvn clean package -DskipTests'
+                    sh 'cd txn-service && mvn clean package -DskipTests'
+                    sh 'cd report-service && mvn clean package -DskipTests'
+                    sh 'cd api-gateway && mvn clean package -DskipTests'
                 }
             }
         }
