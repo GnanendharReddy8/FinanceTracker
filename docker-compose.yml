@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+
+  user-service:
+    container_name: user-service
+    build: ./user-service
+    ports:
+      - "8082:8082"
+    networks:
+      - finance-net
+
+  txn-service:
+    container_name: txn-service
+    build: ./txn-service
+    ports:
+      - "8081:8081"
+    networks:
+      - finance-net
+
+  report-service:
+    container_name: report-service
+    build: ./report-service
+    ports:
+      - "8083:8083"
+    networks:
+      - finance-net
+    environment:
+      - TXN_SERVICE_URL=http://txn-service:8081  # used for Feign client base URL
+
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    ports:
+      - "8085:8085"
+    networks:
+      - finance-net
+    depends_on:
+      - user-service
+      - txn-service
+      - report-service
+
+networks:
+  finance-net:
+    driver: bridge
