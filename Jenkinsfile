@@ -52,5 +52,20 @@ pipeline {
             }
         }
         // Other stages like Ansible and K8s...
+        stage('Run Ansible Playbook') {
+            steps {
+                script {
+                    withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
+                        ansiblePlaybook(
+                            playbook: 'ansible-playbook.yaml',
+                            inventory: 'inventory.ini',
+                            become: true,
+                            credentialsId: ''  // Optional if no SSH/sudo password injection needed
+                        )
+                    }
+                }
+            }
+        }
+
     }
 }
