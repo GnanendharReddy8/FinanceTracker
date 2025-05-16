@@ -7,27 +7,34 @@ pipeline {
 
     environment {
         GITHUB_REPO_URL = 'https://github.com/GnanendharReddy8/FinanceTracker.git'
-        USER_IMAGE = 'gnanendhar8/user-service'
-        TXN_IMAGE = 'gnanendhar8/txn-service'
-        REPORT_IMAGE = 'gnanendhar8/report-service'
-        GATEWAY_IMAGE = 'gnanendhar8/api-gateway'
+        DOCKERHUB_USER = 'gnanendhar8'
     }
 
     stages {
-
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 git branch: 'main', url: "${GITHUB_REPO_URL}"
+            }
+        }
+
+        stage('Build JARs') {
+            steps {
+                script {
+                    sh 'cd user-service && ./mvn clean package -DskipTests'
+                    sh 'cd txn-service && ./mvn clean package -DskipTests'
+                    sh 'cd report-service && ./mvn clean package -DskipTests'
+                    sh 'cd api-gateway && ./mvn clean package -DskipTests'
+                }
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 script {
-                    docker.build("${USER_IMAGE}", "./user-service")
-                    docker.build("${TXN_IMAGE}", "./txn-service")
-                    docker.build("${REPORT_IMAGE}", "./report-service")
-                    docker.build("${GATEWAY_IMAGE}", "./api-gateway")
+                    docker.build("${DOCKERHUB_USER}/user-service", "./user-service")
+                    docker.build("${DOCKERHUB_USER}/txn-service", "./txn-service")
+                    docker.build("${DOCKERHUB_USER}/report-service", "./report-service")
+                    docker.build("${DOCKERHUB_USER}/api-gateway", "./api-gateway")
                 }
             }
         }
@@ -36,36 +43,15 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('', 'DockerHubCred') {
-                        docker.image("${USER_IMAGE}").push()
-                        docker.image("${TXN_IMAGE}").push()
-                        docker.image("${REPORT_IMAGE}").push()
-                        docker.image("${GATEWAY_IMAGE}").push()
+                        docker.image("${DOCKERHUB_USER}/user-service").push()
+                        docker.image("${DOCKERHUB_USER}/txn-service").push()
+                        docker.image("${DOCKERHUB_USER}/report-service").push()
+                        docker.image("${DOCKERHUB_USER}/api-gateway").push()
                     }
                 }
             }
         }
 
-        stage('Run Ansible Playbook') {
-            steps {
-                script {
-                    withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
-                        ansiblePlaybook(
-                            playbook: 'ansible-playbook.yaml',
-                            inventory: 'inventory'
-                        )
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sh '''
-                    kubectl apply -f k8s/
-                    '''
-                }
-            }
-        }
+        // Other stages like Ansible and K8s...
     }
 }
