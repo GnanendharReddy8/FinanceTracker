@@ -60,7 +60,7 @@ pipeline {
                             playbook: 'ansible-playbook.yaml',
                             inventory: 'inventory.ini',
                             become: true,
-                            credentialsId: ''  // Optional if no SSH/sudo password injection needed
+                            credentialsId: ''
                         )
                     }
                 }
