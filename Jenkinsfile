@@ -51,7 +51,6 @@ pipeline {
                 }
             }
         }
-
         // Other stages like Ansible and K8s...
     }
 }
