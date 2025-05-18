@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: report-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: report-service
+  template:
+    metadata:
+      labels:
+        app: report-service
+    spec:
+      containers:
+        - name: report-service
+          image: gnanendhar8/report-service:latest
+          env:
+            - name: TXN_SERVICE_URL
+              value: "http://txn-service:8081"
+          ports:
+            - containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: report-service
+spec:
+  type: NodePort
+  selector:
+    app: report-service
+  ports:
+    - port: 8083
+      targetPort: 8083
+      nodePort: 30083

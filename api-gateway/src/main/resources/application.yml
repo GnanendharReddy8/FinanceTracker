@@ -15,14 +15,22 @@ spring:
           uri: http://user-service:8082
           predicates:
             - Path=/users/**
+          filters:
+            - RewritePath=/users(?<segment>/?.*), /$\{segment}
+
         - id: txn-service
           uri: http://txn-service:8081
           predicates:
             - Path=/txns/**
+          filters:
+            - RewritePath=/txns(?<segment>/?.*), /$\{segment}
+
         - id: report-service
           uri: http://report-service:8083
           predicates:
             - Path=/reports/**
+          filters:
+            - RewritePath=/reports(?<segment>/?.*), /$\{segment}
 
 springdoc:
   swagger-ui:
