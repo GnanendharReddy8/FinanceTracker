@@ -31,4 +31,20 @@ public class TransactionController {
     ) {
         return ResponseEntity.ok(service.getByUserAndDate(userId, from, to));
     }
+
+    // Get all transactions for a specific user
+    @GetMapping("/user/{userId}")
+    public List<Transaction> getTransactionsByUser(@PathVariable Long userId) {
+        return service.getByUserId(userId);
+    }
+
+    // Get all transactions by category
+    @GetMapping("/category/{category}")
+    public List<Transaction> getTransactionsByCategory(@PathVariable String category) {
+        return service.getByCategory(category);
+    }
+    @GetMapping("/get-all")
+    public List<Transaction> getAll() {
+        return service.getAll();
+    }
 }

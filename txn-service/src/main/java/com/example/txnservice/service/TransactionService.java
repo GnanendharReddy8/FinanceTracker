@@ -16,10 +16,19 @@ public class TransactionService {
     }
 
     public Transaction save(Transaction t) {
-        return repo.save(t);
+            return repo.save(t);
     }
 
     public List<Transaction> getByUserAndDate(Long userId, LocalDate from, LocalDate to) {
         return repo.findByUserIdAndDateBetween(userId, from, to);
+    }
+    public List<Transaction> getByCategory(String category) {
+        return repo.findByCategory(category);
+    }
+    public List<Transaction> getByUserId(Long userId) {
+        return repo.findByUserId(userId);
+    }
+    public List<Transaction> getAll(){
+        return repo.findAll();
     }
 }
