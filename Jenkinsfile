@@ -52,19 +52,9 @@ pipeline {
             }
         }
         stage('Run Ansible Playbook') {
-            steps {
-                script {
-                    withEnv(["ANSIBLE_HOST_KEY_CHECKING=False"]) {
-                        ansiblePlaybook(
-                            playbook: 'ansible-playbook.yaml',
-                            inventory: 'inventory.ini',
-                            become: true,
-                            credentialsId: ''
-                        )
-                    }
-                }
-            }
+               steps{
+                        sh 'ansible-playbook playbook.yaml'
+            	}
         }
-
     }
 }

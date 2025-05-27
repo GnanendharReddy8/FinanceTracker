@@ -1,0 +1,5 @@
+---
+- name: Apply prometheus manifest
+  command: kubectl apply -f {{ playbook_dir }}/k8s/prometheus.yaml --kubeconfig ~/.kube/config
+- name: Apply grafana manifest
+  command: kubectl apply -f {{ playbook_dir }}/k8s/grafana.yaml --kubeconfig ~/.kube/config
