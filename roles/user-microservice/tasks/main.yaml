@@ -1,3 +1,3 @@
 ---
 - name: Apply user microservice manifest
-  command: kubectl apply -f {{ playbook_dir }}/k8s/user-deployment.yaml --kubeconfig ~/.kube/config
+  command: kubectl apply -f {{ playbook_dir }}/k8s/user-deployment.yaml
